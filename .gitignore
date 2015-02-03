@@ -26,3 +26,4 @@ _testmain.go
 
 example/example
 example/conf/*.*
+*.conf
