@@ -25,8 +25,8 @@ import (
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
 
-	"github.com/beego/social-auth"
-	"github.com/beego/social-auth/apps"
+	"github.com/philsong/sns-auth"
+	"github.com/philsong/sns-auth/apps"
 
 	// just use mysql driver for example
 	_ "github.com/go-sql-driver/mysql"
@@ -53,6 +53,7 @@ func SetInfoToSession(ctx *context.Context, userSocial *social.UserSocial) {
 }
 
 func HandleRedirect(ctx *context.Context) {
+	fmt.Println("HandleRedirect...")
 	redirect, err := SocialAuth.OAuthRedirect(ctx)
 	if err != nil {
 		beego.Error("SocialAuth.handleRedirect", err)
@@ -64,6 +65,7 @@ func HandleRedirect(ctx *context.Context) {
 }
 
 func HandleAccess(ctx *context.Context) {
+	fmt.Println("HandleAccess...")
 	redirect, userSocial, err := SocialAuth.OAuthAccess(ctx)
 	if err != nil {
 		beego.Error("SocialAuth.handleAccess", err)
@@ -87,6 +89,7 @@ func (this *MainRouter) Home() {
 }
 
 func (this *MainRouter) Login() {
+	fmt.Println("login...")
 	this.TplNames = "index.tpl"
 
 	_, isLogin := IsUserLogin(this.Ctx)
@@ -112,6 +115,7 @@ func (this *MainRouter) Login() {
 }
 
 func (this *MainRouter) Connect() {
+	fmt.Println("Connect...")
 	this.TplNames = "index.tpl"
 
 	st, ok := SocialAuth.ReadyConnect(this.Ctx)

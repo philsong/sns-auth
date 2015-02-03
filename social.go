@@ -46,11 +46,13 @@ type SocialAuth struct {
 
 // generate session key for social-auth
 func (this *SocialAuth) getSessKey(social SocialType, key string) string {
+	fmt.Println("SocialAuth.getSessKey...")
 	return "social_" + fmt.Sprintf("%v", social) + "_" + key
 }
 
 // create oauth2 state string
 func (this *SocialAuth) createState(ctx *context.Context, social SocialType) string {
+	fmt.Println("SocialAuth.createState...")
 	values := make(url.Values, 2)
 
 	if uid, ok := this.app.IsUserLogin(ctx); ok {
@@ -73,6 +75,7 @@ func (this *SocialAuth) createState(ctx *context.Context, social SocialType) str
 
 // verify oauth2 state string
 func (this *SocialAuth) verifyState(ctx *context.Context, social SocialType) (string, bool) {
+	fmt.Println("SocialAuth.verifyState...")
 	code := ctx.Input.Query("code")
 	state := ctx.Input.Query("state")
 
@@ -92,6 +95,7 @@ func (this *SocialAuth) verifyState(ctx *context.Context, social SocialType) (st
 
 // Get provider according request path. ex: /login/: match /login/github
 func (this *SocialAuth) getProvider(ctx *context.Context) Provider {
+	fmt.Println("SocialAuth.getProvider...")
 	path := ctx.Input.Param(":splat")
 
 	p, ok := GetProviderByPath(path)
@@ -104,6 +108,7 @@ func (this *SocialAuth) getProvider(ctx *context.Context) Provider {
 
 // After OAuthAccess check saved token for ready connect
 func (this *SocialAuth) ReadyConnect(ctx *context.Context) (SocialType, bool) {
+	fmt.Println("SocialAuth.ReadyConnect...")
 	var social SocialType
 
 	if s, _ := ctx.Input.CruSession.Get("social_connect").(int); s == 0 {
@@ -121,6 +126,7 @@ func (this *SocialAuth) ReadyConnect(ctx *context.Context) (SocialType, bool) {
 
 // Redirect to other social platform
 func (this *SocialAuth) OAuthRedirect(ctx *context.Context) (redirect string, failedErr error) {
+	fmt.Println("SocialAuth.OAuthRedirect...")
 	_, isLogin := this.app.IsUserLogin(ctx)
 
 	defer func() {
@@ -148,6 +154,7 @@ func (this *SocialAuth) OAuthRedirect(ctx *context.Context) (redirect string, fa
 
 // Callback from social platform
 func (this *SocialAuth) OAuthAccess(ctx *context.Context) (redirect string, userSocial *UserSocial, failedErr error) {
+	fmt.Println("SocialAuth.OAuthAccess...")
 	_, isLogin := this.app.IsUserLogin(ctx)
 
 	defer func() {
@@ -237,6 +244,7 @@ func (this *SocialAuth) OAuthAccess(ctx *context.Context) (redirect string, user
 
 // general use of redirect
 func (this *SocialAuth) handleRedirect(ctx *context.Context) {
+	fmt.Println("SocialAuth.handleRedirect...")
 	redirect, err := this.OAuthRedirect(ctx)
 	if err != nil {
 		beego.Error("SocialAuth.handleRedirect", err)
@@ -249,6 +257,7 @@ func (this *SocialAuth) handleRedirect(ctx *context.Context) {
 
 // general use of redirect callback
 func (this *SocialAuth) handleAccess(ctx *context.Context) {
+	fmt.Println("SocialAuth.handleAccess...")
 	redirect, _, err := this.OAuthAccess(ctx)
 	if err != nil {
 		beego.Error("SocialAuth.handleAccess", err)
@@ -261,9 +270,11 @@ func (this *SocialAuth) handleAccess(ctx *context.Context) {
 
 // save user social info and login the user
 func (this *SocialAuth) ConnectAndLogin(ctx *context.Context, socialType SocialType, uid int) (string, *UserSocial, error) {
+	fmt.Println("SocialAuth.ConnectAndLogin...")
 	tokKey := this.getSessKey(socialType, "token")
 
 	defer func() {
+		fmt.Println("SocialAuth.defer func...")
 		// delete connect tok in session
 		if ctx.Input.CruSession.Get("social_connect") != nil {
 			ctx.Input.CruSession.Delete("social_connect")
@@ -310,6 +321,7 @@ func (this *SocialAuth) ConnectAndLogin(ctx *context.Context, socialType SocialT
 
 // create a global SocialAuth instance
 func NewSocial(urlPrefix string, socialAuther SocialAuther) *SocialAuth {
+	fmt.Println("SocialAuth.NewSocial...")
 	social := new(SocialAuth)
 	social.app = socialAuther
 
@@ -333,6 +345,7 @@ func NewSocial(urlPrefix string, socialAuther SocialAuther) *SocialAuth {
 
 // create a instance and create filter
 func NewWithFilter(urlPrefix string, socialAuther SocialAuther) *SocialAuth {
+	fmt.Println("SocialAuth.NewWithFilter...")
 	social := NewSocial(urlPrefix, socialAuther)
 
 	beego.InsertFilter(social.URLPrefix+"*/access", beego.BeforeRouter, social.handleAccess)
