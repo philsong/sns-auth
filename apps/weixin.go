@@ -22,7 +22,7 @@ import (
 
 	"github.com/astaxie/beego/httplib"
 
-	"github.com/philsong/social-auth"
+	"github.com/philsong/sns-auth"
 )
 
 type Weixin struct {
