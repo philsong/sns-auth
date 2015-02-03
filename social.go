@@ -95,9 +95,9 @@ func (this *SocialAuth) verifyState(ctx *context.Context, social SocialType) (st
 
 // Get provider according request path. ex: /login/: match /login/github
 func (this *SocialAuth) getProvider(ctx *context.Context) Provider {
-	fmt.Println("SocialAuth.getProvider...")
-	path := ctx.Input.Param(":splat")
 
+	path := ctx.Input.Param(":splat")
+	fmt.Println("SocialAuth.getProvider...", path, ctx)
 	p, ok := GetProviderByPath(path)
 	if ok {
 		return p
@@ -130,6 +130,7 @@ func (this *SocialAuth) OAuthRedirect(ctx *context.Context) (redirect string, fa
 	_, isLogin := this.app.IsUserLogin(ctx)
 
 	defer func() {
+		fmt.Println("SocialAuth.defer func()...", redirect)
 		if len(redirect) == 0 && failedErr != nil {
 			if isLogin {
 				redirect = this.ConnectFailedURL
@@ -149,6 +150,7 @@ func (this *SocialAuth) OAuthRedirect(ctx *context.Context) (redirect string, fa
 	config := p.GetConfig()
 	// create redirect url
 	redirect = config.AuthCodeURL(this.createState(ctx, social))
+	fmt.Println("SocialAuth.OAuthRedirect.redirect", redirect)
 	return
 }
 
@@ -212,6 +214,7 @@ func (this *SocialAuth) OAuthAccess(ctx *context.Context) (redirect string, user
 		var uSocial = UserSocial{}
 		if ok, err := p.CanConnect(tok, &uSocial); ok {
 			// save token to session, for connect
+			fmt.Println("SocialAuth.OAuthAccess.ConnectRegisterURL")
 			tk := SocialTokenField{tok}
 			ctx.Input.CruSession.Set(this.getSessKey(social, "token"), tk.RawValue())
 			ctx.Input.CruSession.Set("social_connect", int(social))
@@ -219,6 +222,7 @@ func (this *SocialAuth) OAuthAccess(ctx *context.Context) (redirect string, user
 			redirect = this.ConnectRegisterURL
 
 		} else if err == nil {
+			fmt.Println("SocialAuth.OAuthAccess.ConnectSuccessURL", isLogin)
 			if !isLogin {
 				// login user
 				redirect, failedErr = this.app.LoginUser(ctx, uSocial.Uid)
@@ -235,6 +239,7 @@ func (this *SocialAuth) OAuthAccess(ctx *context.Context) (redirect string, user
 			userSocial = &uSocial
 
 		} else {
+			fmt.Println("SocialAuth.OAuthAccess.err", err)
 			failedErr = err
 		}
 	}
@@ -249,7 +254,7 @@ func (this *SocialAuth) handleRedirect(ctx *context.Context) {
 	if err != nil {
 		beego.Error("SocialAuth.handleRedirect", err)
 	}
-
+	fmt.Println("SocialAuth.handleRedirect.redirect...", redirect)
 	if len(redirect) > 0 {
 		ctx.Redirect(302, redirect)
 	}

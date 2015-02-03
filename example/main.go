@@ -56,9 +56,9 @@ func HandleRedirect(ctx *context.Context) {
 	fmt.Println("HandleRedirect...")
 	redirect, err := SocialAuth.OAuthRedirect(ctx)
 	if err != nil {
-		beego.Error("SocialAuth.handleRedirect", err)
+		beego.Error("handleRedirect", err)
 	}
-
+	fmt.Println("handleRedirect.redirect...", redirect)
 	if len(redirect) > 0 {
 		ctx.Redirect(302, redirect)
 	}
@@ -68,13 +68,16 @@ func HandleAccess(ctx *context.Context) {
 	fmt.Println("HandleAccess...")
 	redirect, userSocial, err := SocialAuth.OAuthAccess(ctx)
 	if err != nil {
-		beego.Error("SocialAuth.handleAccess", err)
+		beego.Error("handleAccess", err)
 	}
 
+	fmt.Println("HandleAccess.userSocial=", userSocial)
 	if userSocial != nil {
+		fmt.Println("HandleAccess.SetInfoToSession", userSocial)
 		SetInfoToSession(ctx, userSocial)
 	}
 
+	fmt.Println("HandleAccess.redirect=", redirect)
 	if len(redirect) > 0 {
 		ctx.Redirect(302, redirect)
 	}
