@@ -1,4 +1,4 @@
-# Beego social auth
+# Beego sns auth
 
 Social accounts connect for beego
 
@@ -10,27 +10,29 @@ Social accounts connect for beego
 * Tencent QQ
 * Dropbox
 * Facebook
+* Weixin
+* Renren
 
 ### Installation
 
 ```
-go get github.com/beego/social-auth
+go get github.com/philsong/sns-auth
 ```
 
 ### Features
 
 * All use Beego
-* Support multiple social platform.
-* Multiple social accounts can be associated to a single user.
+* Support multiple sns platform.
+* Multiple sns accounts can be associated to a single user.
 
 ### Example
 
-see [example project](https://github.com/beego/social-auth/tree/master/example)
+see [example project](https://github.com/philsong/sns-auth/tree/master/example)
 
 Project in world:
 
-* [WeTalk](https://github.com/beego/wetalk) a beego community project
+* [blocktip](http://blocktip.com) a bitcoin/dogecoin tip project
 
 ### Contact
 
-Maintain by [slene](https://github.com/slene)
+Maintain by [philsong](https://github.com/philsong)

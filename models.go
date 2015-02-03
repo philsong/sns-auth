@@ -32,6 +32,8 @@ const (
 	SocialQQ
 	SocialDropbox
 	SocialFacebook
+	SocialWeixin
+	SocialRenren
 	endType
 )
 
