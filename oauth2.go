@@ -149,6 +149,7 @@ func (t *Transport) Exchange(code string) (*Token, error) {
 // If the Token is invalid callers should expect HTTP-level errors,
 // as indicated by the Response's StatusCode.
 func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
+	fmt.Println("RoundTrip...", t.Token)
 	if t.Token == nil {
 		if t.Config == nil {
 			return nil, OAuthError{"RoundTrip", "no Config supplied"}
@@ -165,6 +166,7 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 
 	// Refresh the Token if it has expired.
 	if t.Expired() {
+		fmt.Println("RoundTrip.Refresh...", t.Token)
 		if err := t.Refresh(); err != nil {
 			return nil, err
 		}
@@ -173,6 +175,7 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	// To set the Authorization header, we must make a copy of the Request
 	// so that we don't modify the Request we were given.
 	// This is required by the specification of http.RoundTripper.
+	fmt.Println("RoundTrip.Refresh...", req.URL)
 	req = cloneRequest(req)
 	req.Header.Set("Authorization", "Bearer "+t.AccessToken)
 	req.Header.Set("Accept", "application/json")

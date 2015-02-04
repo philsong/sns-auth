@@ -159,8 +159,9 @@ func (this *SocialAuth) OAuthAccess(ctx *context.Context) (redirect string, user
 	fmt.Println("SocialAuth.OAuthAccess...")
 	_, isLogin := this.app.IsUserLogin(ctx)
 
-	defer func() {
+	func() {
 		if len(redirect) == 0 {
+			fmt.Println("OAuthAccess.defer.failedErr", failedErr)
 			if failedErr != nil {
 				if isLogin {
 					redirect = this.ConnectFailedURL
