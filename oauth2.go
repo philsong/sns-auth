@@ -210,6 +210,7 @@ func (t *Transport) Refresh() error {
 }
 
 func (t *Transport) updateToken(tok *Token, v url.Values) error {
+	v.Set("appid", t.ClientId)
 	v.Set("client_id", t.ClientId)
 	v.Set("client_secret", t.ClientSecret)
 	r, err := (&http.Client{Transport: t.transport()}).PostForm(t.TokenURL, v)

@@ -73,8 +73,8 @@ func NewWeixin(clientId, secret string) *Weixin {
 	p.Scope = "snsapi_login"
 	p.AuthURL = "https://open.weixin.qq.com/connect/qrconnect"
 	p.TokenURL = "https://api.weixin.qq.com/sns/oauth2/access_token"
-	//	p.RedirectURL = social.DefaultAppUrl + "login/weixin/access"
-	p.RedirectURL = "http://bituiwang.com/" + "login/weixin/access"
+	p.RedirectURL = social.DefaultAppUrl + "login/weixin/access"
+	//p.RedirectURL = "http://bituiwang.com/" + "login/weixin/access"
 	p.AccessType = "offline"
 	p.ApprovalPrompt = "auto"
 	return p

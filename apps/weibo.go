@@ -47,7 +47,7 @@ func NewWeibo(clientId, secret string) *Weibo {
 	p.App = p
 	p.ClientId = clientId
 	p.ClientSecret = secret
-	p.Scope = "email"
+	p.Scope = "email,direct_messages_write,follow_app_official_microblog"
 	p.AuthURL = "https://api.weibo.com/oauth2/authorize"
 	p.TokenURL = "https://api.weibo.com/oauth2/access_token"
 	p.RedirectURL = social.DefaultAppUrl + "login/weibo/access"
